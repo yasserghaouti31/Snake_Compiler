@@ -4,10 +4,25 @@ import re
 def lexique_analysis(source_code):
     tokens = []
     patterns = {
-        "integer": r"\bSnk_Int\b\s+(\w+)\s*(,?\s*\w*)",  # Matches Snk_Int declarations
-        "real": r"\bSnk_Real\b\s+(\w+)\s*(,?\s*\w*)",    # Matches Snk_Real declarations
-        "string": r"\bSnk_Strg\b\s+\"([^\"]+)\"",         # Matches Snk_Strg declarations
-        "number": r"\b\d+(\.\d+)?\b",                     # Matches numbers (integers and real)
+      r"\bSnk_Begin\b": "mot clé de début de programme",
+        r"\bSnk_End\b": "mot clé de fin de programme",
+        r"\bSnk_Int\b": "mot clé de déclaration du type entier",
+        r"\bSnk_Real\b": "mot clé de déclaration du type réel",
+        r"\bSnk_Strg\b": "mot clé de déclaration du type chaîne de caractère",
+        r"\bSet\b": "mot clé pour affectation d’une valeur",
+        r"\bIf\b": "mot clé pour conditionnel",
+        r"\bElse\b": "mot clé pour sinon",
+        r"\bBegin\b": "mot clé pour début de bloc",
+        r"\bEnd\b": "mot clé pour fin de bloc",
+        r"\bSnk_Print\b": "mot clé pour affichage",
+        r"\bGet\b": "mot clé pour entrée",
+        r"\w+": "identificateur",  # Matches variable names or identifiers
+        r"\b\d+(\.\d+)?\b": "nombre entier ou réel",  # Matches numbers (integer and real)
+        r"##.*": "commentaire",  # Matches comments starting with ##
+        r"[#,]": "séparateur",  # Matches separator symbols
+        r"\[": "Début de condition",
+        r"\]": "Fin de condition",
+        r"<|>|<=|>=|==|!=": "Opérateur de comparaison"
     }
 
     # Tokenize the source code
