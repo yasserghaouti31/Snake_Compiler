@@ -4,36 +4,35 @@ import re
 def lexique_analysis(source_code):
     tokens = []
     patterns = {
-      r"\bSnk_Begin\b": "mot clé de début de programme",
-        r"\bSnk_End\b": "mot clé de fin de programme",
-        r"\bSnk_Int\b": "mot clé de déclaration du type entier",
-        r"\bSnk_Real\b": "mot clé de déclaration du type réel",
-        r"\bSnk_Strg\b": "mot clé de déclaration du type chaîne de caractère",
-        r"\bSet\b": "mot clé pour affectation d’une valeur",
-        r"\bIf\b": "mot clé pour conditionnel",
-        r"\bElse\b": "mot clé pour sinon",
-        r"\bBegin\b": "mot clé pour début de bloc",
-        r"\bEnd\b": "mot clé pour fin de bloc",
-        r"\bSnk_Print\b": "mot clé pour affichage",
-        r"\bGet\b": "mot clé pour entrée",
-        r"\w+": "identificateur",  # Matches variable names or identifiers
-        r"\b\d+(\.\d+)?\b": "nombre entier ou réel",  # Matches numbers (integer and real)
+        r"\bSnk_Begin\b": "début du programme",
+        r"\bSnk_End\b": "fin du programme",
+        r"\bSnk_Int\b\s+(\w+(?:\s*,\s*\w+)*)": "déclaration de variables entières",  # Matches 'Snk_Int' with multiple variables
+        r"\bSnk_Real\b\s+(\w+)": "déclaration d’une variable réelle",  # Matches 'Snk_Real' with a single variable
+        r"\bSet\b\s+(\w+)\s*(\d+(\.\d+)?)": "affectation d’une valeur à",  # Matches 'Set' with variable and value assignment
+        r"\bIf\b": "conditionnel",  # Matches 'If'
+        r"\bElse\b": "sinon",  # Matches 'Else'
+        r"\bBegin\b": "début de bloc",  # Matches 'Begin'
+        r"\bEnd\b": "fin de bloc",  # Matches 'End'
+        r"\bSnk_Print\b": "Affichage",  # Matches 'Snk_Print'
+        r"\bGet\b": "Affectation de valeur entre 2 variables",  # Matches 'Get' for assignment
         r"##.*": "commentaire",  # Matches comments starting with ##
-        r"[#,]": "séparateur",  # Matches separator symbols
-        r"\[": "Début de condition",
-        r"\]": "Fin de condition",
-        r"<|>|<=|>=|==|!=": "Opérateur de comparaison"
+        r"\[|\]": "début/fin de condition",  # Matches square brackets for condition start/end
+        r"\b\d+(\.\d+)?\b": "nombre entier ou réel",  # Matches numbers (integer or real)
+        r"<|>|<=|>=|==|!=": "Opérateur de comparaison",  # Matches comparison operators
+        r"[#,]": "séparateur",  # Matches separators like ',' or '#'
+        r"\w+": "identificateur",  # Matches variable names or identifiers
     }
 
     # Tokenize the source code
-    for name, pattern in patterns.items():
+    for pattern, description in patterns.items():
         matches = re.findall(pattern, source_code)
         for match in matches:
-            tokens.append((name, match))
-    
-    return "\n".join([f"{name}: {match}" for name, match in tokens])
+            if isinstance(match, tuple):  # If it's a tuple (for patterns with multiple groups), join them
+                tokens.append((description, " ".join(match)))
+            else:
+                tokens.append((description, match))
 
-
+    return "\n".join([f"{description}: {match}" for description, match in tokens])
 # Syntax analysis (basic checks for Snk_Begin and Snk_End)
 def syntax_analysis(source_code):
     if "Snk_Begin" not in source_code or "Snk_End" not in source_code:
