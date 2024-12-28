@@ -10,8 +10,7 @@ def load_file():
         with open(file_path, 'r') as file:
             source_code = file.read()
         # Display the file content in the text box
-        text_box.delete(1.0, tk.END)  # Clear the text box before displaying
-        text_box.insert(tk.END, source_code)
+       
         # Store the source code for further analysis
         global current_source_code
         current_source_code = source_code
@@ -54,12 +53,11 @@ root.title("SNAKE Compiler")
 
 # Set up the frame
 frame = tk.Frame(root)
-frame.pack(padx=10, pady=10)
-
+frame.pack(padx=20, pady=10)
+icon = tk.PhotoImage(file='folder.png')
 # Load file button
-load_button = tk.Button(frame, text="Load .snk File", command=load_file)
+load_button=tk.Button(frame,text='Load file .snk',command=load_file)
 load_button.pack(fill=tk.X, pady=5)
-
 # Lexique button
 lexique_button = tk.Button(frame, text="Lexical Analysis", command=analyze_lexique)
 lexique_button.pack(fill=tk.X, pady=5)
@@ -72,19 +70,13 @@ syntax_button.pack(fill=tk.X, pady=5)
 semantic_button = tk.Button(frame, text="Semantic Analysis", command=analyze_semantic)
 semantic_button.pack(fill=tk.X, pady=5)
 
-# Text box to show the source code
-text_box_label = tk.Label(frame, text="Source Code:")
-text_box_label.pack(anchor="w", pady=5)
-
-text_box = ScrolledText(frame, height=10, width=50)
-text_box.pack(pady=5)
 
 # Results box to display the analysis results
 results_label = tk.Label(frame, text="Analysis Results:")
-results_label.pack(anchor="w", pady=5)
+results_label.pack(anchor="w", pady=10)
 
-results_box = ScrolledText(frame, height=10, width=50)
-results_box.pack(pady=5)
+results_box = ScrolledText(frame, height=30, width=50)
+results_box.pack(pady=20)
 
 # Store the source code globally
 current_source_code = ""
