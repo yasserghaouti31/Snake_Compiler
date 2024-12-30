@@ -9,7 +9,7 @@ def load_file():
     if file_path:
         with open(file_path, 'r') as file:
             source_code = file.read()
-        # Display the file content in the text box
+        global current_source_code
        
         # Store the source code for further analysis
         global current_source_code

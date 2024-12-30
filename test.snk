@@ -2,15 +2,15 @@ Snk_Begin
 Snk_Int i, j, x1, x2 #
 Snk_Real x3 #
 Set i 33 #
-If [ i < 50 ]
+If[i<1]
+Begin
 Set x1 10 #
+End
 Else
 Begin
-Get x2 from x3 #
 Set k 43.5 #
 Snk_Print x2, x3 #
 End
-Snk_Print " Hello :) " #
 Snk_Print i, j #
-## ceci est un commentaire
+## commentaire
 Snk_End
