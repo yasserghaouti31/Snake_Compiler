@@ -12,5 +12,4 @@ Set k 43.5 #
 Snk_Print x2, x3 #
 End
 Snk_Print i, j #
-## commentaire
 Snk_End

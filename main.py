@@ -10,10 +10,9 @@ def load_file():
         with open(file_path, 'r') as file:
             source_code = file.read()
         global current_source_code
-       
         # Store the source code for further analysis
-        global current_source_code
         current_source_code = source_code
+        file_label.config(text=f"Loaded: {file_path}", fg='green')
 
 # Function to handle lexique button
 def analyze_lexique():
@@ -46,37 +45,47 @@ def display_results(result):
 
 # Set up the main Tkinter window
 root = tk.Tk()
-# Changing the Icon button to snake logo
-photo = tk.PhotoImage(file='snake.png')
-root.wm_iconphoto(False,photo)
 root.title("SNAKE Compiler")
+root.geometry("700x500")
+root.configure(bg="#f0f0f0")
+
+# Set window icon
+try:
+    photo = tk.PhotoImage(file='snake.png')
+    root.wm_iconphoto(False, photo)
+except:
+    pass
 
 # Set up the frame
-frame = tk.Frame(root)
+frame = tk.Frame(root, bg="#f0f0f0")
 frame.pack(padx=20, pady=10)
-icon = tk.PhotoImage(file='folder.png')
+
 # Load file button
-load_button=tk.Button(frame,text='Load file .snk',command=load_file)
-load_button.pack(fill=tk.X, pady=5)
+load_button = tk.Button(frame, text='Load .snk File', command=load_file, bg="#4CAF50", fg="white", font=("Arial", 12), relief=tk.RAISED)
+load_button.grid(row=0, column=0, pady=10, padx=10, sticky="ew")
+
+# File status label
+file_label = tk.Label(frame, text="No file loaded", bg="#f0f0f0", fg="red", font=("Arial", 10))
+file_label.grid(row=0, column=1, padx=10)
+
 # Lexique button
-lexique_button = tk.Button(frame, text="Lexical Analysis", command=analyze_lexique)
-lexique_button.pack(fill=tk.X, pady=5)
+lexique_button = tk.Button(frame, text="Lexical Analysis", command=analyze_lexique, bg="#2196F3", fg="white", font=("Arial", 12), relief=tk.RAISED)
+lexique_button.grid(row=1, column=0, pady=5, padx=10, sticky="ew")
 
 # Syntax button
-syntax_button = tk.Button(frame, text="Syntax Analysis", command=analyze_syntax)
-syntax_button.pack(fill=tk.X, pady=5)
+syntax_button = tk.Button(frame, text="Syntax Analysis", command=analyze_syntax, bg="#FFC107", fg="black", font=("Arial", 12), relief=tk.RAISED)
+syntax_button.grid(row=2, column=0, pady=5, padx=10, sticky="ew")
 
 # Semantic button
-semantic_button = tk.Button(frame, text="Semantic Analysis", command=analyze_semantic)
-semantic_button.pack(fill=tk.X, pady=5)
-
+semantic_button = tk.Button(frame, text="Semantic Analysis", command=analyze_semantic, bg="#E91E63", fg="white", font=("Arial", 12), relief=tk.RAISED)
+semantic_button.grid(row=3, column=0, pady=5, padx=10, sticky="ew")
 
 # Results box to display the analysis results
-results_label = tk.Label(frame, text="Analysis Results:")
-results_label.pack(anchor="w", pady=10)
+results_label = tk.Label(frame, text="Analysis Results:", bg="#f0f0f0", font=("Arial", 12, "bold"))
+results_label.grid(row=4, column=0, pady=10, padx=10, sticky="w")
 
-results_box = ScrolledText(frame, height=30, width=50)
-results_box.pack(pady=20)
+results_box = ScrolledText(frame, height=20, width=80, font=("Courier", 10))
+results_box.grid(row=5, column=0, columnspan=2, pady=10)
 
 # Store the source code globally
 current_source_code = ""
