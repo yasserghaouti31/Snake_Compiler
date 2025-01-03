@@ -17,6 +17,7 @@ def lexique_analysis(source_code):
     r"\bEnd\b": "mot cle de fin de bloc",
     r"\bSet\b": "mot cle de affectation d’une valeur",
     r"\bGet\b": "mot cle de Affectation de valeur entre 2 variables",
+    r"\bfrom\b": "mot cle de transfere",
     r"\bSnk_Print\b": "mot cle de Affichage",
     r"##.*": "commentaire",
     r"\[": "début de condition",
@@ -120,16 +121,23 @@ def S(tokens, current_token):
         "mot cle de conditionnel",
         "mot cle de début de bloc",
         "mot cle de Affichage"
+        ,"mot cle de Affectation de valeur entre 2 variables"
+        ,"mot cle de transfere"
+        ,"commentaire"
     ]:
         print("S Token:", tokens[current_token])
         if tokens[current_token][0] == "mot cle de conditionnel":
             current_token = condition(tokens, current_token)
         elif tokens[current_token][0] == "mot cle de début de bloc":
             current_token = block(tokens, current_token)
+        elif tokens[current_token][0] == "mot cle de Affectation de valeur entre 2 variables":
+            current_token = get_statement(tokens, current_token)
         elif tokens[current_token][0] == "mot cle de affectation d’une valeur":
             current_token = assignment(tokens, current_token)
         elif tokens[current_token][0] == "mot cle de Affichage":
             current_token = print_statement(tokens, current_token)
+        elif tokens[current_token][0] =="commentaire" :
+            current_token +=1
         elif tokens[current_token][0] == "mot cle de déclaration de variables entières" or \
              tokens[current_token][0] == "mot cle de déclaration d’une variable réelle":
             current_token = D(tokens, current_token)[1]  # Skip over variable declarations
@@ -138,7 +146,24 @@ def S(tokens, current_token):
             current_token += 1
 
     return current_token  # Return updated current_token
-    
+def get_statement(tokens, current_token):
+    print("Entering get_statement:", current_token)
+    current_token += 1
+    if current_token >= len(tokens) or tokens[current_token][0] != "identificateur":
+        raise Exception("Syntax error: Expected an identifier 1 .")
+    current_token += 1
+    if current_token >=len(tokens) or tokens[current_token][0] !="mot cle de transfere":
+        raise Exception("Syntax error : Expected a from.")
+    current_token +=1
+    if current_token >= len(tokens) or tokens[current_token][0] != "identificateur":
+        raise Exception("Syntax error: Expected an identifier 2 .")
+    current_token += 1
+
+    if current_token >= len(tokens) or tokens[current_token][0] != "fin d’instruction":
+        raise Exception("Syntax error: Expected # at the end of statement.")
+    current_token += 1
+
+    return current_token
 def condition(tokens, current_token):
     """
     Analyzes an If-Else condition.
